@@ -8,14 +8,22 @@
 
 import UIKit
 
+// Protocol definition - top of LocationsViewController.swift
+protocol LocationsViewControllerDelegate : class {
+    func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber)
+}
+
 class LocationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
-    // These need to be specified when project is downloaded on another machine
+    // These need to be specified when project is downloaded on another machine.
+    // The Keys.swift file is ignored in the repository.
     let CLIENT_ID = Keys.client_id
     let CLIENT_SECRET = Keys.secret
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    weak var delegate : LocationsViewControllerDelegate!
 
     var results: NSArray = []
     
@@ -56,6 +64,8 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
         let lngString = "\(lng)"
 
         print(latString + " " + lngString)
+        
+        delegate.locationsPickedLocation(controller: self, latitude: lat, longitude: lng)
     }
     
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
